@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bluffing & Social Deduction Game Builder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #fff0f5;
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+        }
+        .question {
+            display: none;
+            margin-bottom: 20px;
+        }
+        .question.active {
+            display: block;
+        }
+        .result {
+            display: none;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ccc;
+        }
+        button {
+            background-color: #c0392b;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+
+<h1>😏 Bluffing & Social Deduction Game Builder</h1>
+<div class="question active" id="q1">
+    <p><strong>1. What’s the main hidden element in your game?</strong></p>
+    <button onclick="nextQuestion('roles')">Hidden roles (like imposters or secret teams)</button><br>
+    <button onclick="nextQuestion('info')">Secret information or actions</button><br>
+    <button onclick="nextQuestion('identity')">Secret identities that are slowly revealed</button>
+</div>
+
+<div class="question" id="q2">
+    <p><strong>2. How do players interact or trick each other?</strong></p>
+    <button onclick="nextQuestion('talking')">Lots of talking and discussion</button><br>
+    <button onclick="nextQuestion('actions')">Secret actions and sneaky moves</button><br>
+    <button onclick="nextQuestion('voting')">Voting or accusing to eliminate people</button>
+</div>
+
+<div class="question" id="q3">
+    <p><strong>3. How do players win the game?</strong></p>
+    <button onclick="nextQuestion('team_win')">Team wins if they achieve their group goal</button><br>
+    <button onclick="nextQuestion('solo_win')">One player wins if they fool everyone</button><br>
+    <button onclick="nextQuestion('survive_win')">Last player standing wins</button>
+</div>
+
+<div class="question" id="q4">
+    <p><strong>4. What setting or theme fits your game best?</strong></p>
+    <button onclick="nextQuestion('space')">In space or a sci-fi world</button><br>
+    <button onclick="nextQuestion('town')">Small town with secrets</button><br>
+    <button onclick="nextQuestion('chaotic')">Random or meme-style fun</button><br>
+    <button onclick="nextQuestion('spy')">Spy vs spy, missions, or espionage</button>
+</div>
+
+<div class="question" id="q5">
+    <p><strong>5. What twist makes your game more exciting?</strong></p>
+    <button onclick="showResult('double_roles')">Some players have double roles</button><br>
+    <button onclick="showResult('mid_game_change')">The rules or teams change mid-game</button><br>
+    <button onclick="showResult('secret_goals')">Each player has their own secret win goal</button>
+</div>
+
+<div class="result" id="resultBox">
+    <h2>Your Game Blueprint</h2>
+    <p id="gameSummary"></p>
+    <button onclick="restartQuiz()">🔁 Retry</button>
+</div>
+
+<script>
+    let currentQuestion = 1;
+    let answers = [];
+
+    function nextQuestion(answer) {
+        answers.push(answer);
+        document.getElementById("q" + currentQuestion).classList.remove("active");
+        currentQuestion++;
+        document.getElementById("q" + currentQuestion).classList.add("active");
+    }
+
+    function showResult(finalAnswer) {
+        answers.push(finalAnswer);
+        document.getElementById("q" + currentQuestion).classList.remove("active");
+        document.getElementById("resultBox").style.display = "block";
+        document.getElementById("gameSummary").innerText = generateSummary();
+    }
+
+    function generateSummary() {
+        const hidden = answers[0];
+        const interaction = answers[1];
+        const win = answers[2];
+        const theme = answers[3];
+        const twist = answers[4];
+
+        let hiddenText = hidden === 'roles' ? "players have secret roles or teams" :
+                         hidden === 'info' ? "players take secret actions that affect the game" :
+                         "players' identities are hidden and revealed over time";
+        let interactionText = interaction === 'talking' ? "players talk and bluff their way through the game" :
+                              interaction === 'actions' ? "players take sneaky actions that affect others" :
+                              "players vote to eliminate or expose each other";
+        let winText = win === 'team_win' ? "teams win together if they complete their hidden goal" :
+                       win === 'solo_win' ? "one player wins if they trick everyone else" :
+                       "the last player standing wins";
+        let themeText = theme === 'space' ? "a sci-fi setting, like a spaceship or alien world" :
+                        theme === 'town' ? "a secretive small-town setting" :
+                        theme === 'chaotic' ? "a chaotic and funny party vibe" :
+                        "a spy/espionage setting full of missions and betrayal";
+        let twistText = twist === 'double_roles' ? "some players have two roles at once" :
+                        twist === 'mid_game_change' ? "teams or rules change mid-game" :
+                        "each player has their own personal win condition";
+
+        return `Your bluffing & social deduction game includes ${hiddenText}. During the game, ${interactionText}, and players win when ${winText}. The theme is set in ${themeText}, and a twist in your game is: ${twistText}. Start by creating character cards, voting or action rules, and your secret twist mechanic!`;
+    }
+
+    function restartQuiz() {
+        answers = [];
+        document.getElementById("resultBox").style.display = "none";
+        currentQuestion = 1;
+        document.getElementById("q1").classList.add("active");
+    }
+</script>
+
+</body>
+</html>
